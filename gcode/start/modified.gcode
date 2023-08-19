@@ -1,0 +1,30 @@
+;NEPTUNE_START_GCODE
+M413 S0 ; disable Power Loss Recovery
+G90 ; use absolute coordinates
+M83 ; extruder relative mode
+M104 S120 ; set temporary nozzle temp to prevent oozing during homing and auto bed leveling
+M140 S[first_layer_bed_temperature] ; set final bed temp
+M355 S1 P255; turn on bed led
+G4 S10 ; allow partial nozzle warmup
+G28 ; home all axis
+;G29 ; run abl mesh
+M420 S1 ; load mesh
+G1 Z50 F240
+G1 X2 Y5 F3000 ; wipe initial pos
+M104 S[first_layer_temperature] ; set final nozzle temp
+M190 S[first_layer_bed_temperature] ; wait for bed temp to stabilize
+M109 S[first_layer_temperature] ; wait for nozzle temp to stabilize
+G1 Z0.28 F220 ; bring nozzle down for wipe
+G92 E0
+G1 Y140 E10 F1500 ; wipe up
+G1 X2.3 F5000 ; move over
+G92 E0
+G1 Y40 E10 F1200 ; wipe down
+G1 X2.6 F5000 ; move over
+G92 E0
+G1 Y160 E10 F1500 ; wipe up again
+G92 E0
+M300 S440 P200 ; beep to notify print start
+M300 S660 P250
+M300 S880 P300
+;NEPTUNE_START_GCODE_END
